@@ -1,0 +1,29 @@
+{
+  "name": "frostex-orbit",
+  "version": "0.1.0",
+  "description": "FROSTEX ORBIT — Local-First Windows 11 Desktop HUD & Spatial Input System",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm --workspace=apps/desktop run dev",
+    "build": "npm run --workspaces --if-present build",
+    "test": "npm run test:protocol && npm run test:desktop && python -m unittest discover -s services/vision/tests",
+    "test:protocol": "npm --workspace=packages/protocol run test",
+    "test:desktop": "npm --workspace=apps/desktop run test",
+    "test:python": "python -m unittest discover -s services/vision/tests",
+    "lint": "npm run --workspaces --if-present lint"
+  },
+  "keywords": [
+    "orbit",
+    "spatial-computing",
+    "windows-hud",
+    "hand-tracking",
+    "mediapipe",
+    "electron"
+  ],
+  "author": "FROSTEX Engineering",
+  "license": "MIT"
+}
