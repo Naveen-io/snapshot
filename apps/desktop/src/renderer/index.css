@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
   --bg-canvas: #0c0f12;
   --bg-surface: #14191f;

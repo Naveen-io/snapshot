@@ -10,8 +10,20 @@ import { WindowsInputAdapter, Win32InputSink } from './input/windows_input.ts';
 import type { DisplayTarget, OrbitConfig, OrbitMode } from '../../../../packages/protocol/src/types.ts';
 import { DEFAULT_ORBIT_CONFIG } from '../../../../packages/protocol/src/types.ts';
 
-// App root path resolution
-const projectRoot = path.resolve(__dirname, '../../../../');
+import fs from 'fs';
+
+// Dynamic project root resolution
+function findProjectRoot(): string {
+  let curr = __dirname;
+  while (curr !== path.dirname(curr)) {
+    if (fs.existsSync(path.join(curr, 'services', 'vision'))) {
+      return curr;
+    }
+    curr = path.dirname(curr);
+  }
+  return path.resolve(__dirname, '../../..');
+}
+const projectRoot = findProjectRoot();
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
@@ -82,6 +94,7 @@ function spawnVisionService(): void {
     env: {
       ...process.env,
       PYTHONUNBUFFERED: '1',
+      PYTHONPATH: projectRoot,
       ORBIT_PORT: visionPort.toString(),
       ORBIT_SESSION_TOKEN: sessionToken,
     },
