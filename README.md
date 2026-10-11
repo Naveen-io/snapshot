@@ -1,129 +1,124 @@
-# FROSTEX ORBIT
+# SNAPSHOT
+### Premium Windows 11 Screenshot, Visual Comparison & Documentation Workspace
 
-> **Local-First Windows 11 Desktop Control System & Spatial HUD**
-
-FROSTEX ORBIT is a personal computing interface inspired by futuristic suit computers. It provides a compact desktop HUD, hand-controlled mouse tracking, emergency controls, voice-command integration, and a modular architecture for optional head/eye inputs and non-invasive brain-computer interface (BCI) research.
-
----
-
-## 1. Architectural Principles & Safety Invariants
-
-1. **Local-First Processing**: 100% of video frames and sensor data are processed strictly in RAM on the local PC. Zero camera images, audio streams, or personal metrics are ever sent to the cloud or saved to disk.
-2. **Camera OFF by Default**: The webcam is never activated automatically on system boot or app launch. Camera capture starts only following an explicit user action (`PREVIEW` or `POINTER` mode).
-3. **OS Input Disarmed by Default**: Input injection starts in `OFF` mode on every launch, reboot, service crash, or application restart.
-4. **Single Policy Authority**: The central state machine (`OFF`, `PREVIEW`, `CALIBRATION`, `POINTER`, `PAUSED`, `ERROR`) is the sole authority permitted to authorize Windows OS mouse events. Zero input is injected in `PREVIEW` or `CALIBRATION`.
-5. **Fail-Closed Synthetic Button Release**: On tracking loss (>300ms), camera disconnection, service restart, emergency stop, or crash, all synthetic mouse buttons are immediately released to prevent stuck drags.
-6. **Physical Priority Always**: Physical mouse movement, physical keyboard typing, and global emergency shortcut `Ctrl+Alt+Backspace` instantly override hand tracking.
-7. **No Arbitrary Shell Execution**: Spoken and gestured actions are mapped to a static, compile-time allowlist of 5 safe operational shortcuts. Arbitrary shell or PowerShell execution is strictly prohibited.
+SNAPSHOT is a high-performance Windows 11 desktop application engineered with a single guiding principle:
+**Capture instantly. Edit only when needed. Never interrupt the user's workflow unnecessarily.**
 
 ---
 
-## 2. System Architecture
+## ⚡ Next-Generation Workspace Suite
 
-```text
-┌────────────────────────────────────────────────────────┐
-│ FROSTEX ORBIT Desktop Shell (Electron + React 19)      │
-│ Compact HUD · Tray controls · Calibration · Practice   │
-└───────────────────────────┬────────────────────────────┘
-                            │ loopback WebSocket (127.0.0.1)
-                            │ with session secret token
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│ Python Vision Service (MediaPipe 0.10.35 + OpenCV 5.0) │
-│ Camera capture · 21 3D landmarks · Biometric features  │
-│ Palm-scale normalization · Adaptive smoothing filter   │
-└───────────────────────────┬────────────────────────────┘
-                            │ permission-gated events only
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│ Windows Native Input Adapter (Win32 SendInput)         │
-│ Display coordinate mapping · Debounced pinch clicks    │
-│ Capped scroll delta · Fail-closed synthetic release    │
-└────────────────────────────────────────────────────────┘
-```
+### 1. 🔍 Visual Diff Studio (Feature 1)
+- **Compare Any Two Screenshots**: Load directly from local capture history or import files from disk.
+- **Multiple Comparison Modes**:
+  - **Split Slider**: Drag before/after comparison divider with live percentage indicator.
+  - **Side-by-Side**: Direct synchronized comparison of two visual states.
+  - **Opacity Overlay**: Smooth cross-fade blending from 0% to 100% opacity.
+  - **Difference Heatmap**: Local pixel-difference engine calculating Euclidean color distances.
+- **Changed Region Detection**: 32×32 pixel cell clustering identifies changed UI bounding boxes.
+- **Configurable Thresholds**: Adjustable sensitivity slider (0.01 to 0.40) and customizable highlight colors (Red, Magenta, Cyan, Yellow).
+- **Dimension Normalization**: Intelligent pad, scale, and crop alignment for comparing screenshots of differing resolutions.
+- **Instant Export**: Copy difference image to clipboard or save directly to disk.
+
+### 2. 📖 Screenshot Flow Guides (Feature 2)
+- **Step-by-Step Documentation Builder**: Produce procedural, illustrated instructions in seconds.
+- **Multi-Step Management**: Capture steps live via global hotkeys, pick from recent history, or import image files.
+- **Reordering & Editing**: Drag-and-drop or one-click Up/Down reordering with automatic 1-indexed badge renumbering.
+- **Full Metadata Controls**: Editable step title, multi-line procedural description, screenshot caption, and custom badge color swatches.
+- **Zero-Dependency Offline Exporters**:
+  - **Vector PDF Guide**: Generated offline via Chromium `webContents.printToPDF` with custom print stylesheets (`@media print`), page-break avoidance, and crisp vector typography.
+  - **Standalone HTML Guide**: Single self-contained HTML document with embedded base64 data URLs, table of contents, and responsive layout.
+  - **Markdown Document**: Formatted GitHub-compatible `.md` document ready for Git repositories or wikis.
+- **Local Persistence**: Flow guides saved locally in `guides.json` with zero server dependencies.
+
+### 3. 🎨 Compose Studio (Feature 3)
+- **Multi-Screenshot Presentation Storyboard**: Combine multiple screenshots into a cohesive, high-end visual composite.
+- **Flexible Layout Engine**:
+  - **Horizontal Row**: Ideal for before/after workflows and comparisons.
+  - **Vertical Stack**: Perfect for sequential workflows, mobile flows, and tall forms.
+  - **2-Column Grid**: Balanced showcase for UI dashboards and feature sets.
+- **Precision Spacing & Alignments**:
+  - Configurable item gap (0 to 64px) and outer canvas padding (0 to 96px).
+  - Cross-axis alignment: Start, Center, End.
+  - Optional vertical and horizontal dividers with custom color and stroke width.
+  - Optional titles and captions for individual screenshots.
+- **Window Frame Mockups**: Windows 11 titlebars (with min/max/close controls) or macOS 3-dot window headers.
+- **Visual Styling**: Adjustable corner radius (0 to 24px) and soft elevation drop shadows (0 to 48px blur with Y offset).
+- **Backdrop Styling**: Restrained solid charcoal/dark tones, transparent background, or vibrant multi-stop linear gradients.
+- **Reusable Preset Management**: Save custom storyboard configurations as presets and switch instantly.
+- **Lossless High-Resolution Export**: Renders at 100% natural pixel resolution for copy to clipboard or disk export (PNG, JPEG, WebP).
 
 ---
 
-## 3. Host Environment Requirements
+## 🛠️ Core Capture & Editor Capabilities
 
-- **Operating System:** Windows 11 x64 (Build 22000 or newer; verified on Build 26300).
-- **Node.js:** v22.x or v24.x (verified on Node v24.18.0 with npm 11.16.0).
-- **Python:** Python 3.10 to 3.14 (verified on Python 3.14.3 with `opencv-python`, `mediapipe`, `numpy`, and `websockets`).
-- **Webcam:** Any standard USB or integrated webcam (tested with HD User Facing Webcam).
-- **Display:** Any standard display (tested with `DISPLAY1` 1536x864 and `DISPLAY5` 1440x900).
+- **Instant Region Capture**: Global hotkey (`Ctrl + Shift + S`) across any active display or dual-monitor setup.
+- **Multi-Monitor Display Switcher**: Per-display bounds handling with a top switcher pill (`Display 1` | `Display 2`) preventing DWM scaling distortion across mixed DPI monitors.
+- **Non-Negotiable Fast Actions**:
+  - **Enter** (Quick Copy): Copies captured region immediately to the Windows clipboard as true image data and closes the overlay.
+  - **E** (Open Editor): Opens the full-screen annotation workspace with the image ready to edit.
+  - **S** (Save): Writes screenshot directly to disk (`Pictures/Screenshots` by default).
+  - **P** (Pin Screenshot): Opens an always-on-top, movable, floating window with adjustable opacity.
+  - **Escape** (Cancel): Instantly dismisses capture mode without clutter.
+- **Comprehensive Annotation Tools (15 Tools)**:
+  - Arrow, Line, Rectangle, Rounded Rectangle, Ellipse.
+  - Freehand Pen, Highlighter (multiply blend).
+  - Text Annotations, Auto-incrementing Step Badges.
+  - **Permanent Redaction**: Destruction of pixel data under blackout or blur zones before export.
+  - Spotlight / Focus Highlight, Crop, Rotation (90° increments).
+  - Color Picker Loupe with one-click HEX, RGB, and HSL copying.
+- **Local WebAssembly OCR**:
+  - Tesseract.js engine running completely offline on your device.
+  - Extracts text from screenshots with one-click copy to clipboard.
+- **Custom Shortcut Recorder**:
+  - Record any valid accelerator combination (e.g., `Ctrl+Alt+S`, `F9`) with conflict detection and live registration.
 
 ---
 
-## 4. Development Setup & Commands
+## 🚀 Development & Packaging
 
-### Clone & Install Dependencies
-```powershell
-# In project root (d:\E.V)
-npm install
-python -m pip install -r services/vision/requirements.txt
-```
+### 1. Prerequisites
+- **Node.js**: v20+ (tested on Node v24.18 x64)
+- **Operating System**: Windows 10 / Windows 11
 
-### Run Tests
-```powershell
-# Run the complete test suite (34 automated tests across TypeScript & Python)
+### 2. Run Automated Unit & Regression Tests
+```bash
 npm test
+```
+All 8 test suites pass with 100% success:
+- `coordinates.test.ts`
+- `diff.test.ts`
+- `guides.test.ts`
+- `compose.test.ts`
+- `export.test.ts`
+- `redaction.test.ts`
+- `shortcuts.test.ts`
+- `regression.test.ts`
 
-# Run individual test suites
-npm run test:protocol   # Protocol schema & validators
-npm run test:desktop    # State machine & Windows input adapter
-npm run test:python     # Computer vision feature extraction & smoothing
+### 3. Build Production Application
+```bash
+npm run build
 ```
 
-### Launch in Development Mode
-```powershell
-# Builds Electron main, preload, and Vite renderer, then launches ORBIT
-npm run --workspace=apps/desktop build
-npm run --workspace=apps/desktop start
+### 4. Package Windows Application
+```bash
+npm run pack
 ```
+Packaged output location:
+`release/win-unpacked/SNAPSHOT.exe`
 
-### Build Windows Application Package
-```powershell
-npm run --workspace=apps/desktop package
-# Output generated in apps/desktop/dist-package/win-unpacked/
+### 5. Generate Windows NSIS Installer
+```bash
+npm run dist
 ```
+Installer output location:
+`release/SNAPSHOT Setup 1.0.0.exe`
 
 ---
 
-## 5. Keyboard Shortcuts & Controls
+## 🔒 Privacy & Architecture
 
-| Shortcut | Action | Scope |
-|---|---|---|
-| `Ctrl + Alt + Backspace` | **Emergency Stop**: Immediately disarms pointer and releases all synthetic mouse buttons. | Global (system-wide) |
-| `Ctrl + Alt + G` | Toggle HUD window visibility. | Global |
-| `Esc` | Pause pointer mode when HUD is focused. | In-App |
-
----
-
-## 6. Gesture Grammar
-
-| Gesture | Action | Mechanics & Safety |
-|---|---|---|
-| **Index Fingertip Move** | Moves Windows mouse cursor | Mapped via 4-point display calibration; speed-adaptive smoothing eliminates tremor while preserving responsiveness. Requires `POINTER` mode. |
-| **Thumb + Index Pinch** | Left Click | Emits exactly ONE click on pinch transition. Debounced; holding pinch does not multi-click. |
-| **Thumb + Middle Pinch** | Right Click | Requires geometric separation from index finger. |
-| **Index + Middle Extended** | Two-Finger Scroll | Peace sign posture with ring and pinky folded. Vertical hand motion scrolls smoothly; click gestures are strictly suppressed during scroll. |
-
----
-
-## 7. Voice Control Allowlist
-
-FROSTEX ORBIT uses Windows 11 Voice Access as the primary baseline for operating the desktop hands-free. A local allowlist handles 5 specific operational actions:
-1. `"Pause ORBIT"` — Immediately transitions state to `PAUSED`.
-2. `"Open ORBIT Settings"` — Brings the HUD window to the foreground.
-3. `"Center Pointer"` — Snaps cursor to center of active monitor.
-4. `"Start Camera Preview"` — Enters `PREVIEW` mode.
-5. `"Power Down ORBIT"` — Closes camera and transitions to `OFF`.
-
----
-
-## 8. Troubleshooting & Known Limitations
-
-- **Elevated Windows (UIPI)**: Windows User Interface Privilege Isolation prevents standard user applications from sending synthetic input to Administrator/Elevated windows (such as Task Manager). This is standard Windows security behavior. Moving cursor back to a standard window restores normal spatial control.
-- **Backlighting**: Harsh backlighting (e.g. sitting with a bright window directly behind you) causes silhouetting that degrades landmark confidence. Ensure comfortable ambient room light.
-- **Hand-Loss Freeze**: If your hand leaves the camera frame, pointer motion freezes immediately. If a synthetic button was held down, it is released automatically after 300 ms.
-- **Hardware-Gated Sensors**: Dedicated eye tracking requires specialized infrared hardware (e.g. Tobii Eye Tracker 5). BCI/EEG is strictly non-invasive research-stage functionality and requires specialized hardware.
+- **100% Offline & Private**: Zero telemetry, no cloud APIs, no mandatory accounts, no remote subscriptions.
+- **Destructive Redaction**: Redacted areas are permanently overwritten at the pixel level before file encoding to prevent data leaks.
+- **Atomic Local Persistence**: Settings, screenshot history, guides, and composition presets utilize atomic temporary-file swaps (`.tmp` to final) preventing corruption during sudden restarts.
+- **Hardware Acceleration**: Built with lightweight Vite 8 + React 19 + TypeScript on Electron 44, designed to run smoothly on standard laptops with 16 GB RAM.

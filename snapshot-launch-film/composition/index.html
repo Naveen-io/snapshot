@@ -1,0 +1,1000 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Snapshot Launch Film</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #ffffff;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+        color: #111827;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        background: #ffffff;
+        overflow: hidden;
+      }
+
+      .studio-vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 1) 0%, rgba(245, 245, 247, 0.7) 70%, rgba(235, 235, 238, 0.9) 100%);
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .clip {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+      }
+
+      /* Scene 1: The Hook */
+      #scene-hook {
+        z-index: 10;
+        text-align: center;
+        padding: 0 80px;
+      }
+
+      .hook-tag {
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: #4b5563;
+        margin-bottom: 24px;
+      }
+
+      .hook-headline-1 {
+        font-size: 88px;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        line-height: 1.05;
+        color: #111827;
+        margin-bottom: 24px;
+      }
+
+      .hook-headline-2 {
+        font-size: 64px;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        line-height: 1.15;
+        color: #1f2937;
+      }
+
+      /* Scene 2-5: Hero Showcase Area */
+      #scene-showcase {
+        z-index: 20;
+      }
+
+      .scene-header {
+        position: absolute;
+        top: 140px;
+        text-align: center;
+        width: 100%;
+        z-index: 30;
+      }
+
+      .scene-tag {
+        display: inline-block;
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #1f2937;
+        background: #f3f4f6;
+        padding: 8px 20px;
+        border-radius: 100px;
+        margin-bottom: 20px;
+        border: 1px solid #e5e7eb;
+      }
+
+      .scene-title {
+        font-size: 68px;
+        font-weight: 800;
+        letter-spacing: -0.035em;
+        line-height: 1.1;
+        color: #111827;
+      }
+
+      .canvas-backdrop {
+        position: relative;
+        width: 820px;
+        height: 1280px;
+        border-radius: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 45px 100px -25px rgba(0, 0, 0, 0.28), 0 20px 40px -15px rgba(0, 0, 0, 0.12);
+        overflow: hidden;
+      }
+
+      .bg-raw {
+        background: #ffffff;
+        box-shadow: 0 35px 80px -20px rgba(0, 0, 0, 0.16);
+      }
+
+      .bg-sunset {
+        background: linear-gradient(135deg, #f97316 0%, #ec4899 50%, #8b5cf6 100%);
+      }
+
+      .bg-obsidian {
+        background: linear-gradient(135deg, #090d16 0%, #111827 50%, #1f2937 100%);
+      }
+
+      .bg-editorial {
+        background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 50%, #d1d5db 100%);
+      }
+
+      .backdrop-pattern {
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(rgba(255, 255, 255, 0.25) 1.5px, transparent 1.5px);
+        background-size: 28px 28px;
+        opacity: 0.6;
+        pointer-events: none;
+      }
+
+      .phone-chassis {
+        position: relative;
+        width: 530px;
+        height: 1060px;
+        border-radius: 56px;
+        background: #111827;
+        padding: 14px;
+        box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.45);
+        border: 2px solid rgba(255, 255, 255, 0.25);
+      }
+
+      .chassis-rim {
+        position: absolute;
+        inset: -2px;
+        border-radius: 58px;
+        border: 2px solid rgba(255, 255, 255, 0.35);
+        pointer-events: none;
+      }
+
+      .phone-screen {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border-radius: 44px;
+        background: #090d16;
+        overflow: hidden;
+      }
+
+      .dynamic-island {
+        position: absolute;
+        top: 14px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 130px;
+        height: 32px;
+        border-radius: 20px;
+        background: #000000;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 14px;
+      }
+
+      .island-camera {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #0f172a;
+        border: 1px solid #1e293b;
+      }
+
+      .island-indicator {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #10b981;
+      }
+
+      .glass-specular {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(125deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 30%, transparent 60%);
+        pointer-events: none;
+        z-index: 40;
+      }
+
+      .app-ui {
+        width: 100%;
+        height: 100%;
+        background: #090d16;
+        color: #ffffff;
+        font-family: 'Inter', sans-serif;
+        padding: 60px 28px 28px 28px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .ui-status-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 600;
+        color: #e2e8f0;
+        margin-bottom: 24px;
+      }
+
+      .ui-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .ui-user-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: #94a3b8;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .ui-app-name {
+        font-size: 26px;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: -0.02em;
+      }
+
+      .ui-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .ui-card-balance {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 28px;
+        padding: 24px;
+        margin-bottom: 24px;
+      }
+
+      .ui-card-subtitle {
+        font-size: 13px;
+        font-weight: 600;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 8px;
+      }
+
+      .ui-card-amount {
+        font-size: 38px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: #ffffff;
+        margin-bottom: 12px;
+      }
+
+      .ui-pill-growth {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(16, 185, 129, 0.15);
+        color: #34d399;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 5px 12px;
+        border-radius: 100px;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+      }
+
+      .ui-chart {
+        width: 100%;
+        height: 120px;
+        margin-bottom: 24px;
+      }
+
+      .ui-section-title {
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: #cbd5e1;
+        margin-bottom: 14px;
+      }
+
+      .ui-activity-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 20px;
+        padding: 14px 18px;
+        margin-bottom: 10px;
+      }
+
+      .ui-item-info {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .ui-item-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      .icon-stripe {
+        background: #4338ca;
+        color: #ffffff;
+      }
+
+      .icon-apple {
+        background: #334155;
+        color: #ffffff;
+      }
+
+      .ui-item-name {
+        font-size: 15px;
+        font-weight: 600;
+        color: #f1f5f9;
+      }
+
+      .ui-item-date {
+        font-size: 12px;
+        color: #94a3b8;
+      }
+
+      .ui-item-val {
+        font-size: 15px;
+        font-weight: 700;
+        color: #f8fafc;
+      }
+
+      .floating-preset-pill {
+        position: absolute;
+        bottom: 140px;
+        background: #111827;
+        color: #ffffff;
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        padding: 14px 36px;
+        border-radius: 100px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        z-index: 35;
+      }
+
+      .preset-pill-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #f97316;
+      }
+
+      .export-badge {
+        position: absolute;
+        bottom: 220px;
+        background: #111827;
+        color: #ffffff;
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        padding: 20px 48px;
+        border-radius: 100px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.28);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        z-index: 50;
+      }
+
+      .export-badge-indicator {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 15px #10b981;
+      }
+
+      /* Scene 6: Brand Resolution */
+      #scene-brand {
+        z-index: 60;
+        background: #ffffff;
+        text-align: center;
+      }
+
+      .brand-icon-box {
+        width: 120px;
+        height: 120px;
+        border-radius: 30px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12), 0 5px 15px rgba(0, 0, 0, 0.06);
+        margin-bottom: 36px;
+        overflow: hidden;
+      }
+
+      .brand-icon-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .brand-title {
+        font-size: 54px;
+        font-weight: 800;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #111827;
+        margin-bottom: 20px;
+      }
+
+      .brand-tagline {
+        font-size: 32px;
+        font-weight: 600;
+        color: #1f2937;
+        letter-spacing: -0.01em;
+      }
+
+      audio {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="20"
+      data-width="1080"
+      data-height="1920"
+    >
+      <!-- Audio clips nested inside composition root -->
+      <audio
+        id="bgm"
+        class="clip"
+        data-start="0"
+        data-duration="20"
+        data-track-index="1"
+        data-volume="0.28"
+        data-fade-out="1.5"
+        src="assets/music/bgm.mp3"
+      ></audio>
+      <audio
+        id="sfx-drop"
+        class="clip"
+        data-start="6.2"
+        data-duration="0.11"
+        data-track-index="2"
+        data-volume="0.6"
+        src="assets/sfx/interface/drop_001.ogg"
+      ></audio>
+      <audio
+        id="sfx-switch1"
+        class="clip"
+        data-start="11.2"
+        data-duration="0.31"
+        data-track-index="3"
+        data-volume="0.5"
+        src="assets/sfx/ui/switch1.ogg"
+      ></audio>
+      <audio
+        id="sfx-switch2"
+        class="clip"
+        data-start="12.6"
+        data-duration="0.31"
+        data-track-index="4"
+        data-volume="0.5"
+        src="assets/sfx/ui/switch1.ogg"
+      ></audio>
+      <audio
+        id="sfx-switch3"
+        class="clip"
+        data-start="14.0"
+        data-duration="0.31"
+        data-track-index="5"
+        data-volume="0.5"
+        src="assets/sfx/ui/switch1.ogg"
+      ></audio>
+      <audio
+        id="sfx-export"
+        class="clip"
+        data-start="16.0"
+        data-duration="0.10"
+        data-track-index="6"
+        data-volume="0.65"
+        src="assets/sfx/interface/click_001.ogg"
+      ></audio>
+      <audio
+        id="sfx-bell"
+        class="clip"
+        data-start="18.0"
+        data-duration="1.48"
+        data-track-index="7"
+        data-volume="0.5"
+        src="assets/sfx/impact/impactBell_heavy_000.ogg"
+      ></audio>
+
+      <!-- Studio floor ambient illumination -->
+      <div class="studio-vignette"></div>
+
+      <!-- SCENE 1: THE HOOK (0.0s - 3.2s) -->
+      <div id="scene-hook" class="clip" data-start="0" data-duration="3.4" data-track-index="0">
+        <div id="hook-tag" class="hook-tag">Project Snapshot</div>
+        <div id="hook-title-1" class="hook-headline-1">Your app.</div>
+        <div id="hook-title-2" class="hook-headline-2">Make it look the part.</div>
+      </div>
+
+      <!-- HERO SHOWCASE STAGE (3.0s - 17.8s) -->
+      <div id="scene-showcase" class="clip" data-start="3.0" data-duration="14.8" data-track-index="0">
+        <div id="stage-header" class="scene-header">
+          <div id="stage-tag" class="scene-tag">The Starting Point</div>
+          <div id="stage-title" class="scene-title">Raw Screen Capture</div>
+        </div>
+
+        <div id="canvas-card" class="canvas-backdrop bg-raw">
+          <div id="canvas-pattern" class="backdrop-pattern" style="opacity: 0"></div>
+
+          <div id="phone-chassis" class="phone-chassis" style="border-color: transparent; box-shadow: none">
+            <div id="chassis-rim" class="chassis-rim" style="opacity: 0"></div>
+
+            <div id="dynamic-island" class="dynamic-island" style="opacity: 0">
+              <div class="island-camera"></div>
+              <div class="island-indicator"></div>
+            </div>
+
+            <div id="glass-specular" class="glass-specular" style="opacity: 0"></div>
+
+            <div id="phone-screen" class="phone-screen">
+              <div class="app-ui">
+                <div class="ui-status-bar">
+                  <span>9:41</span>
+                  <div style="display: flex; gap: 6px; align-items: center">
+                    <span>5G</span>
+                    <svg width="20" height="12" viewBox="0 0 20 12" fill="none">
+                      <rect x="1" y="1" width="15" height="10" rx="3" stroke="#e2e8f0" stroke-width="1.5" />
+                      <rect x="2.5" y="2.5" width="10" height="7" rx="1.5" fill="#e2e8f0" />
+                      <path d="M18 4.5V7.5" stroke="#e2e8f0" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                  </div>
+                </div>
+
+                <div class="ui-header">
+                  <div>
+                    <div class="ui-user-title">Overview</div>
+                    <div class="ui-app-name">Pulse Studio</div>
+                  </div>
+                  <div class="ui-avatar"></div>
+                </div>
+
+                <div class="ui-card-balance">
+                  <div class="ui-card-subtitle">Total Revenue</div>
+                  <div class="ui-card-amount">$48,290.00</div>
+                  <div class="ui-pill-growth">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M2.5 8.5L9.5 1.5M9.5 1.5H4.5M9.5 1.5V6.5" stroke="#34d399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <span>+24.8% this week</span>
+                  </div>
+                </div>
+
+                <div class="ui-chart">
+                  <svg width="100%" height="100%" viewBox="0 0 400 120" fill="none" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.4" />
+                        <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.0" />
+                      </linearGradient>
+                    </defs>
+                    <path
+                      d="M 0 100 C 60 90, 90 40, 150 50 C 210 60, 260 20, 320 25 C 360 28, 380 10, 400 8 L 400 120 L 0 120 Z"
+                      fill="url(#chartGrad)"
+                    />
+                    <path
+                      d="M 0 100 C 60 90, 90 40, 150 50 C 210 60, 260 20, 320 25 C 360 28, 380 10, 400 8"
+                      stroke="#3b82f6"
+                      stroke-width="3.5"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </div>
+
+                <div class="ui-section-title">Recent Transactions</div>
+
+                <div class="ui-activity-item">
+                  <div class="ui-item-info">
+                    <div class="ui-item-icon icon-stripe">S</div>
+                    <div>
+                      <div class="ui-item-name">Stripe Payout</div>
+                      <div class="ui-item-date">Today, 2:40 PM</div>
+                    </div>
+                  </div>
+                  <div class="ui-item-val">+$3,450.00</div>
+                </div>
+
+                <div class="ui-activity-item">
+                  <div class="ui-item-info">
+                    <div class="ui-item-icon icon-apple">A</div>
+                    <div>
+                      <div class="ui-item-name">App Store Sales</div>
+                      <div class="ui-item-date">Yesterday, 9:15 AM</div>
+                    </div>
+                  </div>
+                  <div class="ui-item-val">+$8,120.00</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="preset-pill" class="floating-preset-pill" style="opacity: 0">
+          <div id="pill-dot" class="preset-pill-dot"></div>
+          <span id="pill-label">Velvet Sunset</span>
+        </div>
+
+        <div id="export-pill" class="export-badge" style="opacity: 0">
+          <div class="export-badge-indicator"></div>
+          <span>Exported &bull; Lossless 4K PNG</span>
+        </div>
+      </div>
+
+      <!-- SCENE 6: BRAND RESOLUTION (17.8s - 20.0s) -->
+      <div id="scene-brand" class="clip" data-start="17.6" data-duration="2.4" data-track-index="0" style="opacity: 0">
+        <div id="brand-icon" class="brand-icon-box">
+          <img src="assets/icon.png" alt="Snapshot App Icon" />
+        </div>
+        <div id="brand-name" class="brand-title">SNAPSHOT</div>
+        <div id="brand-sub" class="brand-tagline">Your app. In its best light.</div>
+      </div>
+    </div>
+
+    <!-- GSAP MASTER TIMELINE -->
+    <script>
+      const tl = gsap.timeline({ paused: true });
+
+      // SHOT 01: THE HOOK (0.0s - 3.2s)
+      tl.fromTo(
+        '#hook-tag',
+        { opacity: 0, y: 15 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
+        0.2
+      );
+
+      tl.fromTo(
+        '#hook-title-1',
+        { opacity: 0, y: 35 },
+        { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' },
+        0.5
+      );
+
+      tl.fromTo(
+        '#hook-title-2',
+        { opacity: 0, y: 35 },
+        { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' },
+        1.5
+      );
+
+      tl.to(
+        '#scene-hook',
+        { opacity: 0, scale: 0.96, duration: 0.5, ease: 'power2.inOut' },
+        2.9
+      );
+
+      // SHOT 02: THE STARTING POINT / RAW CAPTURE (3.2s - 6.0s)
+      tl.fromTo(
+        '#stage-header',
+        { opacity: 0, y: 25 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
+        3.2
+      );
+
+      tl.fromTo(
+        '#canvas-card',
+        { opacity: 0, scale: 0.92, y: 40 },
+        { opacity: 1, scale: 1.0, y: 0, duration: 0.8, ease: 'power3.out' },
+        3.2
+      );
+
+      tl.to('#canvas-card', { scale: 1.02, duration: 1.7, ease: 'none' }, 4.0);
+
+      // SHOT 03: HERO TRANSFORMATION (6.0s - 11.2s)
+      tl.to(
+        '#stage-header',
+        { opacity: 0, y: -20, duration: 0.4, ease: 'power2.in' },
+        5.7
+      );
+
+      tl.call(
+        () => {
+          document.getElementById('stage-tag').textContent = 'Hero Transformation';
+          document.getElementById('stage-title').textContent = 'Device framing. In seconds.';
+        },
+        null,
+        6.1
+      );
+
+      tl.to(
+        '#stage-header',
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
+        6.2
+      );
+
+      tl.to(
+        '#phone-chassis',
+        {
+          borderColor: 'rgba(255, 255, 255, 0.25)',
+          boxShadow: '0 30px 70px -15px rgba(0, 0, 0, 0.45)',
+          duration: 0.5,
+          ease: 'power2.out'
+        },
+        6.2
+      );
+
+      tl.to(
+        ['#chassis-rim', '#dynamic-island', '#glass-specular'],
+        { opacity: 1, duration: 0.6, ease: 'power2.out' },
+        6.2
+      );
+
+      tl.call(
+        () => {
+          const card = document.getElementById('canvas-card');
+          card.classList.remove('bg-raw');
+          card.classList.add('bg-sunset');
+        },
+        null,
+        6.4
+      );
+
+      tl.fromTo(
+        '#canvas-pattern',
+        { opacity: 0 },
+        { opacity: 0.6, duration: 0.8, ease: 'power2.out' },
+        6.4
+      );
+
+      tl.to(
+        '#canvas-card',
+        {
+          boxShadow: '0 45px 100px -25px rgba(249, 115, 22, 0.35), 0 20px 40px -15px rgba(0, 0, 0, 0.2)',
+          duration: 1.0,
+          ease: 'power2.out'
+        },
+        6.4
+      );
+
+      tl.fromTo(
+        '#glass-specular',
+        { x: -50, opacity: 0 },
+        { x: 0, opacity: 1, duration: 1.0, ease: 'power2.out' },
+        6.6
+      );
+
+      // SHOT 04: DESIGN VARIETY / TASTE SYSTEM (11.2s - 15.2s)
+      tl.to(
+        '#stage-header',
+        { opacity: 0, y: -15, duration: 0.3, ease: 'power2.in' },
+        10.7
+      );
+
+      tl.call(
+        () => {
+          document.getElementById('stage-tag').textContent = 'Curated Presets';
+          document.getElementById('stage-title').textContent = 'The Taste System';
+        },
+        null,
+        11.0
+      );
+
+      tl.to(
+        '#stage-header',
+        { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },
+        11.1
+      );
+
+      // Preset 1: Velvet Sunset
+      tl.fromTo(
+        '#preset-pill',
+        { opacity: 0, y: 20, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1.0, duration: 0.4, ease: 'back.out(1.5)' },
+        11.2
+      );
+
+      // Preset 2: Obsidian Luxe
+      tl.call(
+        () => {
+          const card = document.getElementById('canvas-card');
+          card.classList.remove('bg-sunset');
+          card.classList.add('bg-obsidian');
+          document.getElementById('pill-label').textContent = 'Obsidian Luxe';
+          document.getElementById('pill-dot').style.background = '#06b6d4';
+        },
+        null,
+        12.6
+      );
+
+      tl.fromTo(
+        '#preset-pill',
+        { scale: 0.92 },
+        { scale: 1.0, duration: 0.35, ease: 'back.out(1.8)', immediateRender: false },
+        12.6
+      );
+
+      tl.to(
+        '#canvas-card',
+        {
+          boxShadow: '0 45px 100px -25px rgba(0, 0, 0, 0.65), 0 20px 40px -15px rgba(0, 0, 0, 0.3)',
+          duration: 0.4,
+          ease: 'power2.out'
+        },
+        12.6
+      );
+
+      // Preset 3: Clean Editorial
+      tl.call(
+        () => {
+          const card = document.getElementById('canvas-card');
+          card.classList.remove('bg-obsidian');
+          card.classList.add('bg-editorial');
+          document.getElementById('pill-label').textContent = 'Clean Editorial';
+          document.getElementById('pill-dot').style.background = '#111827';
+        },
+        null,
+        14.0
+      );
+
+      tl.fromTo(
+        '#preset-pill',
+        { scale: 0.92 },
+        { scale: 1.0, duration: 0.35, ease: 'back.out(1.8)', immediateRender: false },
+        14.0
+      );
+
+      tl.to(
+        '#canvas-card',
+        {
+          boxShadow: '0 45px 100px -25px rgba(0, 0, 0, 0.22), 0 20px 40px -15px rgba(0, 0, 0, 0.1)',
+          duration: 0.4,
+          ease: 'power2.out'
+        },
+        14.0
+      );
+
+      // SHOT 05: READY FOR THE WORLD / 4K EXPORT (15.2s - 17.8s)
+      tl.call(
+        () => {
+          const card = document.getElementById('canvas-card');
+          card.classList.remove('bg-editorial');
+          card.classList.add('bg-sunset');
+        },
+        null,
+        15.2
+      );
+
+      tl.to(
+        '#preset-pill',
+        { opacity: 0, y: 15, duration: 0.3, ease: 'power2.in' },
+        15.1
+      );
+
+      tl.to(
+        '#stage-header',
+        { opacity: 0, y: -15, duration: 0.3, ease: 'power2.in' },
+        15.1
+      );
+
+      tl.call(
+        () => {
+          document.getElementById('stage-tag').textContent = 'Production Ready';
+          document.getElementById('stage-title').textContent = 'Ready for the App Store.';
+        },
+        null,
+        15.4
+      );
+
+      tl.to(
+        '#stage-header',
+        { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },
+        15.5
+      );
+
+      tl.to(
+        '#canvas-card',
+        {
+          scale: 0.98,
+          boxShadow: '0 50px 110px -20px rgba(249, 115, 22, 0.4), 0 25px 45px -15px rgba(0, 0, 0, 0.25)',
+          duration: 0.8,
+          ease: 'power2.out'
+        },
+        15.3
+      );
+
+      tl.fromTo(
+        '#export-pill',
+        { opacity: 0, y: 30, scale: 0.9 },
+        { opacity: 1, y: 0, scale: 1.0, duration: 0.5, ease: 'back.out(1.7)' },
+        16.0
+      );
+
+      tl.to(
+        '#scene-showcase',
+        { opacity: 0, scale: 0.97, duration: 0.45, ease: 'power2.inOut' },
+        17.4
+      );
+
+      // SHOT 06: BRAND RESOLUTION (17.8s - 20.0s)
+      tl.to(
+        '#scene-brand',
+        { opacity: 1, duration: 0.4, ease: 'power2.out' },
+        17.6
+      );
+
+      tl.fromTo(
+        '#brand-icon',
+        { opacity: 0, y: 30, scale: 0.85 },
+        { opacity: 1, y: 0, scale: 1.0, duration: 0.6, ease: 'back.out(1.6)' },
+        17.8
+      );
+
+      tl.fromTo(
+        '#brand-name',
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
+        18.1
+      );
+
+      tl.fromTo(
+        '#brand-sub',
+        { opacity: 0, y: 15 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
+        18.4
+      );
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines['main'] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

@@ -1,29 +1,61 @@
 {
-  "name": "frostex-orbit",
-  "version": "0.1.0",
-  "description": "FROSTEX ORBIT — Local-First Windows 11 Desktop HUD & Spatial Input System",
-  "private": true,
-  "workspaces": [
-    "packages/*",
-    "apps/*"
-  ],
+  "name": "snapshot-app",
+  "productName": "SNAPSHOT",
+  "version": "1.0.0",
+  "description": "Premium Windows Screenshot, Annotation & Image Workspace",
+  "main": "dist/main/index.js",
+  "author": "Antigravity Engineering",
+  "license": "MIT",
   "scripts": {
-    "dev": "npm --workspace=apps/desktop run dev",
-    "build": "npm run --workspaces --if-present build",
-    "test": "npm run test:protocol && npm run test:desktop && python -m unittest discover -s services/vision/tests",
-    "test:protocol": "npm --workspace=packages/protocol run test",
-    "test:desktop": "npm --workspace=apps/desktop run test",
-    "test:python": "python -m unittest discover -s services/vision/tests",
-    "lint": "npm run --workspaces --if-present lint"
+    "dev:renderer": "vite",
+    "build:renderer": "vite build",
+    "build:main": "tsc -p tsconfig.node.json",
+    "build": "npm run build:renderer && npm run build:main",
+    "dev": "npm run build && electron dist/main/index.js",
+    "start": "electron dist/main/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "pack": "npm run build && electron-builder --dir",
+    "dist": "npm run build && electron-builder"
   },
-  "keywords": [
-    "orbit",
-    "spatial-computing",
-    "windows-hud",
-    "hand-tracking",
-    "mediapipe",
-    "electron"
-  ],
-  "author": "FROSTEX Engineering",
-  "license": "MIT"
+  "build": {
+    "appId": "com.snapshot.app",
+    "productName": "SNAPSHOT",
+    "win": {
+      "target": ["nsis", "portable"],
+      "icon": "resources/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "SNAPSHOT"
+    },
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "resources/**/*",
+      "package.json"
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "electron": "^44.7.0",
+    "electron-builder": "^26.15.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.3"
+  },
+  "dependencies": {
+    "lucide-react": "^1.55.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tesseract.js": "^7.0.0"
+  }
 }
