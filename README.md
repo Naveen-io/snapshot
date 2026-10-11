@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # SNAPSHOT
 ### Premium Windows 11 Screenshot, Visual Comparison & Documentation Workspace
 
